@@ -1,0 +1,23 @@
+table {
+    width: 100%;
+    border-collapse: collapse; 
+    text-align: left;
+}
+
+th {
+    /* UI Properties */
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-bold) var(--unnamed-font-size-10)/20px Roboto;
+    letter-spacing: var(--unnamed-character-spacing-0);
+    font: normal normal bold 10px/20px Roboto;
+    color: #0B749B;
+    opacity: 1;
+    border-bottom: 1px solid;
+}
+
+.ranking {
+    text-align: center !important;
+}
+
+.view {
+    cursor: pointer;
+}
