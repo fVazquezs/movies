@@ -5,11 +5,8 @@ header {
 }
 
 .button-container button {
-  /* Layout Properties */
-  top: 135px;
-  left: 214px;
-  width: 108px;
-  height: 30px;
+
+  padding: 10px;
   /* UI Properties */
   background: var(--unnamed-color-ffffff) 0% 0% no-repeat padding-box;
   background: #FFFFFF 0% 0% no-repeat padding-box;
@@ -26,6 +23,8 @@ header {
   color: #78849E;
 
   cursor: pointer;
+  margin-right: 20px;
+
 }
 
 .App {
@@ -39,5 +38,38 @@ header {
 
 .button-container {
   text-align: left;
+  display: flex;
+  margin-bottom: 20px;
+}
 
+.choosing-year {
+  background: #00BAFF 0% 0% no-repeat padding-box !important;
+  letter-spacing: var(--unnamed-character-spacing-0) !important;
+  color: var(--unnamed-color-012433) !important;
+  text-align: center !important;
+  font: normal normal medium 12px/14px Roboto !important;
+  letter-spacing: 0px !important;
+  color: #012433 !important;
+  opacity: 1 !important;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown .choosing-year {
+  display: block;
+}
+
+.movie-ranking-title {
+  margin: 30px auto;
+  font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) 24px/var(--unnamed-line-spacing-12) Roboto;
+  letter-spacing: var(--unnamed-character-spacing-0);
+  color: var(--unnamed-color-386071);
+  text-align: left;
+  font: normal normal normal 24px/12px Roboto;
+  letter-spacing: 0px;
+  color: #386071;
+  opacity: 1;
 }

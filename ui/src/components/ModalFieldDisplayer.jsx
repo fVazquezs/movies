@@ -6,9 +6,9 @@ export default ({title, text, isLink}) => {
 
 
     return (
-        <>
-            <p className="modal-text-display-title">{title}</p>
-            <p className={`modal-text-display-text ${isLink ? 'isLink' : '' }`}>{text}</p>
-        </>
+        <div className="modal-field-displayer">
+            <div className="modal-text-display-title">{title}</div>
+            <div className={`modal-text-display-text ${isLink ? 'isLink' : '' }`}>{text}</div>
+        </div>
     )
 }

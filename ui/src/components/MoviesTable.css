@@ -1,6 +1,6 @@
 table {
     width: 100%;
-    border-collapse: collapse; 
+    border-collapse: collapse;
     text-align: left;
 }
 
@@ -20,4 +20,16 @@ th {
 
 .view {
     cursor: pointer;
+}
+
+.table-row {
+    height: 40px;
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) 16px/20px Roboto;
+    letter-spacing: var(--unnamed-character-spacing-0);
+    text-align: left;
+    font: normal normal normal 16px/20px Roboto;
+    letter-spacing: 0px;
+    color: #536B7A;
+    opacity: 1;
+    border-bottom: 1px solid #78849E66;
 }
