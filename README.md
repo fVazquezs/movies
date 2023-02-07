@@ -46,4 +46,9 @@ Make sure that the steps above are completed
     npm start
     ```
 
-Data is setup and you can reload your page
+Data is setup and you can reload your pag
+
+## TODO list
+1. Unit tests
+2. Clean code patterns
+3. Additional nice to have UI feature, ex.: button colors
