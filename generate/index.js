@@ -41,5 +41,5 @@ const generateMovie = () => {
   };
 };
 
-const movies = Array.from({ length: 80 }, () => generateMovie());
+const movies = Array.from({ length: 300 }, () => generateMovie());
 fs.writeFileSync('./movies.json',JSON.stringify(movies));

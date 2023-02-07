@@ -1,103 +1,112 @@
 import axios from 'axios';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './App.css';
 import MoviesTable from './components/MoviesTable';
 import YearPicker from './components/YearPicker';
+import { useIsVisible } from './core/useIsVisibleHook';
 
 function App() {
+  const movieTableContainerRef = useRef()
   const [movies, setMovies] = useState([]);
-  const [moviesToDisplay, setMoviesToDisplay] = useState([]);
+  const [numberOfMovies, setNumberOfMovies] = useState(0);
+  const [movieLastIndexToShow, setMovieLastIndexToShow] = useState(10);
   const [years, setYears] = useState([]);
   const [isChoosingYear, setIsChoosingYear] = useState(false);
   const [yearPicked, setYearPicked] = useState(null);
 
-  let loadingMovies = false;
+  const isVisible = useIsVisible(movieTableContainerRef)
 
   useEffect(() => {
-    console.log("inside use effect movies")
-    setDisplayedMovies(true)
-  }, [movies])
-  useEffect(() => {
-    console.log("inside use effect yearpicked", yearPicked)
-    async function loadMovies() {
-      let moviesResponse;
-      try {
-        if (yearPicked != null && typeof yearPicked === "number") {
-          moviesResponse = await axios.get(`http://localhost:8080/movies/${yearPicked}`)
-        } else {
-          moviesResponse = await axios.get("http://localhost:8080/movies")
-        }
-        console.log(moviesResponse.data)
-        setMovies([...moviesResponse.data])
-      } catch {
-        console.log("Failed to load movies")
-      }
+    if (isVisible) {
+      onEndOfListIsInView()
     }
-    loadMovies()
-  }, [yearPicked])
+    console.log("component is visible ", isVisible)
+  }, [isVisible])
 
+  useEffect(() => {
+    console.log("movieLastIndexToShow updated ",movieLastIndexToShow ,numberOfMovies)
+    setDisplayedMovies()
+  }, [movieLastIndexToShow])
+
+  useEffect(() => {
+    console.log("numberOfMovies updated", numberOfMovies)
+    
+    setMovieLastIndexToShow(0)
+    setDisplayedMovies()
+  }, [numberOfMovies])
+
+  useEffect(() => {
+    if (movies.length > 0) {
+      console.log("setting movie length to", movies.length)
+      setNumberOfMovies(movies.length)
+    // setDisplayedMovies()
+      
+    }
+  }, [movies])
+
+  useEffect(() => {
+    if (typeof yearPicked === "number") {
+      loadMovies()
+    }
+  }, [yearPicked])
 
   useEffect(() => {
     async function loadData() {
       try {
         const years = await axios.get("http://localhost:8080/movies/years")
         setYears(years.data)
+        loadMovies()
       } catch {
         console.log("Failed to load data")
       }
     }
     loadData()
-    document.addEventListener('scroll', trackScrolling);
-
-    return () => document.removeEventListener('scroll', trackScrolling);
   }, [])
 
-  function isBottom(el) {
-    return el.getBoundingClientRect().bottom <= window.innerHeight;
-  }
-
-  function trackScrolling() {
-    const wrappedElement = document.querySelector('.App');
-    if (isBottom(wrappedElement) && !loadingMovies) {
-      console.log('header bottom reached');
-      loadingMovies = true
-      setDisplayedMovies()
-      loadingMovies = false
+  async function loadMovies() {
+    let moviesResponse;
+    try {
+      if (yearPicked && typeof yearPicked === "number" && yearPicked > 0) {
+        moviesResponse = await axios.get(`http://localhost:8080/movies/${yearPicked}`)
+      } else {
+        moviesResponse = await axios.get("http://localhost:8080/movies")
+      }
+      setMovies(moviesResponse.data)
+    } catch {
+      console.log("Failed to load movies")
     }
   }
 
-   function setDisplayedMovies(forceCleanUp) {
-    console.log(`setDisplayedMovies force ${forceCleanUp} with length`, moviesToDisplay.length)
-    const moviesLength = movies.length
-    const currentDisplayedLength = moviesToDisplay.length
-    if (moviesLength <= currentDisplayedLength) {
-      console.log(`movie length ${movies.length} is less than current displayed ${currentDisplayedLength}`)
-      return}
-    let endIndex = currentDisplayedLength + 10
-    if (endIndex == moviesToDisplay.length && !forceCleanUp)  {
-      console.log('all movies showing')
-      return}
-    if (moviesLength < endIndex) {
-      endIndex = moviesLength
-    }
-    let subarray = movies.slice(currentDisplayedLength, endIndex)
-    let helper = forceCleanUp ? [] : moviesToDisplay
-    helper.push(...subarray)
-    setMoviesToDisplay([...moviesToDisplay, ...subarray])
-    console.log("setDisplayedMovies done", helper)
+  function setDisplayedMovies() {
+    if (!isVisible) return  
+    console.log("updating index ", numberOfMovies, movieLastIndexToShow)
+    if (numberOfMovies < movieLastIndexToShow) return 
 
+    let newLastIndex = movieLastIndexToShow + 10
+    if (newLastIndex > numberOfMovies) {
+      newLastIndex = numberOfMovies
+    }
+    setMovieLastIndexToShow(newLastIndex)
   }
 
   function onClickedChooseYear() {
-    console.log("onClickedChooseYear")
     setIsChoosingYear(!isChoosingYear)
   }
 
   function onClickNoYear() {
-    console.log("onClickNoYear")
     setIsChoosingYear(false)
-    setYearPicked(null)
+    setYearPicked(0)
   }
+
+  let isUpdatingList = false
+  function onEndOfListIsInView() {
+    if (isUpdatingList) return
+
+    isUpdatingList = true
+    setDisplayedMovies()
+    isUpdatingList = false
+  }
+
 
   return (
     <div className="App">
@@ -107,11 +116,14 @@ function App() {
         <div className='button-container'>
           <button onClick={() => onClickNoYear()}>Top 10 Revenue</button>
           <div className="dropdown" onClick={() => onClickedChooseYear()}>
-            <button className={isChoosingYear ? 'choosing-year' : null}>Top 10 Revenue {yearPicked != null ? yearPicked : 'per Year'}</button>
+            <button className={isChoosingYear ? 'choosing-year' : null}>Top 10 Revenue {yearPicked > 0 ? yearPicked : 'per Year'}</button>
             {isChoosingYear ? <YearPicker years={years} onSelectYear={year => setYearPicked(year)} /> : null}
           </div>
         </div>
-        <MoviesTable movies={moviesToDisplay} />
+        <div >
+          <MoviesTable movies={movies} lastIndexToShow={movieLastIndexToShow} />
+          <div ref={movieTableContainerRef}/>
+        </div>
       </div>
     </div>
   );
