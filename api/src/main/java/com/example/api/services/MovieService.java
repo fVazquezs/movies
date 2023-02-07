@@ -34,4 +34,11 @@ public class MovieService {
         DistinctIterable<Integer> years = mongoTemplate.getCollection("movies").distinct("year", Integer.class);
         return StreamSupport.stream(years.spliterator(), false).toList();
     }
+
+    public boolean create(List<Movie> movies) {
+        for (Movie movie: movies) {
+            movieRepository.insert(movie);
+        }
+        return true;
+    }
 }

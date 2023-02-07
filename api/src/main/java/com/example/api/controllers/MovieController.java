@@ -35,4 +35,9 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getDistinctYears(), HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody List<Movie> movies){
+        return new ResponseEntity<>(movieService.create(movies), HttpStatus.OK);
+    }
+
 }

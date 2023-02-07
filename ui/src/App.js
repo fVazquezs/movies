@@ -20,27 +20,22 @@ function App() {
     if (isVisible) {
       onEndOfListIsInView()
     }
-    console.log("component is visible ", isVisible)
   }, [isVisible])
 
   useEffect(() => {
-    console.log("movieLastIndexToShow updated ",movieLastIndexToShow ,numberOfMovies)
-    setDisplayedMovies()
+    if (isVisible) {
+      setDisplayedMovies()
+    }
   }, [movieLastIndexToShow])
 
   useEffect(() => {
-    console.log("numberOfMovies updated", numberOfMovies)
-    
     setMovieLastIndexToShow(0)
     setDisplayedMovies()
   }, [numberOfMovies])
 
   useEffect(() => {
     if (movies.length > 0) {
-      console.log("setting movie length to", movies.length)
       setNumberOfMovies(movies.length)
-    // setDisplayedMovies()
-      
     }
   }, [movies])
 
@@ -78,9 +73,7 @@ function App() {
   }
 
   function setDisplayedMovies() {
-    if (!isVisible) return  
-    console.log("updating index ", numberOfMovies, movieLastIndexToShow)
-    if (numberOfMovies < movieLastIndexToShow) return 
+    if (numberOfMovies < movieLastIndexToShow) return
 
     let newLastIndex = movieLastIndexToShow + 10
     if (newLastIndex > numberOfMovies) {
@@ -122,7 +115,7 @@ function App() {
         </div>
         <div >
           <MoviesTable movies={movies} lastIndexToShow={movieLastIndexToShow} />
-          <div ref={movieTableContainerRef}/>
+          <div ref={movieTableContainerRef} />
         </div>
       </div>
     </div>

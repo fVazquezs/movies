@@ -1,7 +1,12 @@
   # Use root/example as user/password credentials
 version: '3.1'
 
+networks:
+  app-network:
+    driver: brigde
+
 services:
+
 
   mongo:
     image: mongo
@@ -12,12 +17,16 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
-  # mongo-express:
-  #   image: mongo-express
-  #   restart: always
-  #   ports:
-  #     - 8081:8081
-  #   environment:
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
-  #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+  ui:
+    build:
+      context: ./ui
+    restart: always
+    ports:
+      - 3000:3000
+
+  api:
+    build:
+      context: ./api
+    restart: always
+    ports:
+      - 8080:8080

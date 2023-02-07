@@ -1,6 +1,6 @@
-const {faker} = require("@faker-js/faker")
+const { faker } = require("@faker-js/faker")
 const fs = require('fs');
-
+const axios = require('axios')
 
 const generateMovie = () => {
 
@@ -42,4 +42,6 @@ const generateMovie = () => {
 };
 
 const movies = Array.from({ length: 300 }, () => generateMovie());
-fs.writeFileSync('./movies.json',JSON.stringify(movies));
+
+const apiHost = process.env.IS_DOCKER ? 'host.docker.internal' : 'localhost'
+axios.post(`http://${apiHost}:8080/movies`, movies).then(resp => console.log(resp))
