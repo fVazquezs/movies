@@ -1,18 +1,29 @@
 package com.example.api.model;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.io.Serializable;
+
 @Data
-@Document(collection = "movies")
-public class Movie {
+@Entity
+@Table(name = "movies")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Movie implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String title;
+    @Column(length = 1000)
     private String description;
     private double rating;
     private int metascore;
     private int numberOfVotes ;
+    @Column(name = "year_of_release")
     private int year;
     private String runtime;
     private int revenue;
