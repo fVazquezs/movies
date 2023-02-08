@@ -1,54 +1,41 @@
 # Movies app
-To run this project you can either use docker (recommended!)
+To run this project you need to have java and node installed
 ```
- docker-compose up
+ node -v
+ java --version
 ```
 
-Or run it manually with the following steps
-* Install node if you dont have it
+And run 2 applications
+* UI
 ```
-node -v
 cd ui
 npm install
-npm start
+npm run build
+npm run start:build
 ```
 
-* Make sure to have gradle and java 19 installed
+* API (open a new terminal)
 ```
-gradle build
 cd api
-java -jar ./build/libs/api-0.0.1-SNAPSHOT.jar
+java -jar ./api-0.0.1-SNAPSHOT.jar
 ```
-
-* Run mongo in your local machine, here is how:
-    * windows https://hevodata.com/learn/windows-mongodb-shell/ 
-    * macos https://treehouse.github.io/installation-guides/mac/mongo-mac.html#:~:text=Run%20the%20Mongo%20daemon%2C%20in%20one%20terminal%20window%20run%20~%2F,to%20access%20data%20in%20MongoDB.
-    * or with docker    
-     ````
-        docker run -d -p 27017:27017 \
-	-e MONGO_INITDB_ROOT_USERNAME=root \
-	-e MONGO_INITDB_ROOT_PASSWORD=example \
-	mongo
-    ````
 
 You should be able to open http://localhost:3000 and see an empty list
 
 ## Data creation
-Make sure that the steps above are completed
-* For docker
-    ```
-    docker build ./generate -t generate && docker run generate
-    ```
-* In you machine
-    ```
-    cd generate
-    npm install
-    npm start
-    ```
+Make sure that the steps above are completed (open a new terminal)
+``` 
+cd generate
+npm install
+npm start
+```
 
-Data is setup and you can reload your pag
+Data is setup and you can reload your page
 
 ## TODO list
 1. Unit tests
 2. Clean code patterns
-3. Additional nice to have UI feature, ex.: button colors
+3. Pagination in the api
+4. Swagger documentation
+5. Additional nice to have UI feature, ex.: button colors
+ 
